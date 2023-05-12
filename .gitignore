@@ -1,0 +1,6 @@
+.idea/
+target/**
+.idea
+.idea/*
+.idea/*.xml
+.idea/*.xml
