@@ -2,6 +2,7 @@ package org.sec.crypto;
 
 import org.codehaus.jackson.map.ObjectMapper;
 import org.sec.crypto.models.Block;
+import org.sec.crypto.utils.StringUtil;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -23,14 +24,12 @@ public class BasicChain {
         thirdBlock.minedBlock(NETWORK_DIFFICULTY);
 
         basicBlockChain = List.of(firstBlock, secondBlock, thirdBlock);
-        if(isChainValid()){
+        if (isChainValid()) {
             System.out.println("Chain is valid");
-        }
-        else {
+        } else {
             System.out.println("Chain is not valid");
         }
-        ObjectMapper om = new ObjectMapper();
-        String basicBlockChainJson = om.writerWithDefaultPrettyPrinter().writeValueAsString(basicBlockChain);
+        String basicBlockChainJson = StringUtil.toJson(basicBlockChain);
         System.out.println("Block chain : ");
         System.out.println(basicBlockChainJson);
 
@@ -46,13 +45,15 @@ public class BasicChain {
             previousBlock = basicBlockChain.get(i - 1);
 
             if (!currentBlock.getHash().equals(currentBlock.calculateHash())) {
+                System.out.println("#Current Hashes not equal");
                 return false;
             }
             if (!previousBlock.getHash().equals(currentBlock.getPreviousHash())) {
+                System.out.println("#Previous Hashes not equal");
                 return false;
             }
             if (!currentBlock.getHash().substring(0, NETWORK_DIFFICULTY).equals(hashTarget)) {
-                System.out.println("the block : " + currentBlock.getData() + " has not been mined yet");
+                System.out.println("the block : " + currentBlock.getData() + " has not been mined");
                 return false;
             }
         }

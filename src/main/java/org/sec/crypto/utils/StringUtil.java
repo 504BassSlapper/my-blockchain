@@ -1,9 +1,14 @@
 package org.sec.crypto.utils;
 
+import org.codehaus.jackson.map.ObjectMapper;
+import org.sec.crypto.BasicChain;
+import org.sec.crypto.models.Block;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
+import java.util.List;
 import java.util.stream.IntStream;
 
 @Component
@@ -26,5 +31,10 @@ public class StringUtil {
             exception.printStackTrace();
             throw new RuntimeException(exception);
         }
+    }
+
+    public static String toJson(List<Block> basicBlockChain) throws IOException {
+        ObjectMapper om = new ObjectMapper();
+        return om.writerWithDefaultPrettyPrinter().writeValueAsString(basicBlockChain);
     }
 }
