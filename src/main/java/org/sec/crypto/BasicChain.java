@@ -1,6 +1,7 @@
 package org.sec.crypto;
 
 import org.codehaus.jackson.map.ObjectMapper;
+import org.sec.crypto.helper.ChainHelper;
 import org.sec.crypto.models.Block;
 import org.sec.crypto.utils.StringUtil;
 
@@ -24,7 +25,7 @@ public class BasicChain {
         thirdBlock.minedBlock(NETWORK_DIFFICULTY);
 
         basicBlockChain = List.of(firstBlock, secondBlock, thirdBlock);
-        if (isChainValid()) {
+        if (ChainHelper.isChainValid(NETWORK_DIFFICULTY, basicBlockChain)) {
             System.out.println("Chain is valid");
         } else {
             System.out.println("Chain is not valid");
@@ -35,28 +36,5 @@ public class BasicChain {
 
     }
 
-    public static boolean isChainValid() {
-        Block currentBlock;
-        Block previousBlock;
-        String hashTarget = new String(new char[NETWORK_DIFFICULTY]).replace('\0', '0');
 
-        for (int i = 1; i < basicBlockChain.size(); i++) {
-            currentBlock = basicBlockChain.get(i);
-            previousBlock = basicBlockChain.get(i - 1);
-
-            if (!currentBlock.getHash().equals(currentBlock.calculateHash())) {
-                System.out.println("#Current Hashes not equal");
-                return false;
-            }
-            if (!previousBlock.getHash().equals(currentBlock.getPreviousHash())) {
-                System.out.println("#Previous Hashes not equal");
-                return false;
-            }
-            if (!currentBlock.getHash().substring(0, NETWORK_DIFFICULTY).equals(hashTarget)) {
-                System.out.println("the block : " + currentBlock.getData() + " has not been mined");
-                return false;
-            }
-        }
-        return true;
-    }
 }
